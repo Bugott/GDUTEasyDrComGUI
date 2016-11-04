@@ -1,0 +1,29 @@
+﻿<controls:MetroWindow x:Class="GDUTEasyDrComGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GDUTEasyDrComGUI"
+        xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        mc:Ignorable="d"
+        Title="DrCom for GDUT"
+        GlowBrush="LightBlue"
+        Height="144" Width="240"
+        MaxHeight="144" MaxWidth="240"
+        MinHeight="144" MinWidth="240"
+        SaveWindowPosition="True" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" StateChanged="MetroWindow_StateChanged" Icon="pack://siteoforigin:,,,/GDUTDrCom.ico">
+    <controls:MetroWindow.RightWindowCommands>
+        <controls:WindowCommands>
+            <TextBlock><Hyperlink NavigateUri="https://github.com/mchome" RequestNavigate="About" Foreground="White">About</Hyperlink></TextBlock>
+        </controls:WindowCommands>
+    </controls:MetroWindow.RightWindowCommands>
+    <Grid>
+        <Label x:Name="lab_usr" Content="账号" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tb_usr" HorizontalAlignment="Left" Height="23" Margin="53,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="171"/>
+        <Label x:Name="lab_pw" Content="密码" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+        <PasswordBox x:Name="tb_pw" HorizontalAlignment="Left" Height="23" Margin="53,42,0,0" VerticalAlignment="Top" Width="171"/>
+        <Button x:Name="btn_login" Content="登陆" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="75" Click="btn_login_Click"/>
+        <Button x:Name="btn_logout" Content="注销" HorizontalAlignment="Left" Margin="149,72,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="btn_logout_Click"/>
+
+    </Grid>
+</controls:MetroWindow>
