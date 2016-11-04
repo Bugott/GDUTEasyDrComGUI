@@ -7,11 +7,13 @@
         xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
         Title="DrCom for GDUT"
+        TitleCharacterCasing="Normal"
         GlowBrush="LightBlue"
-        Height="144" Width="240"
-        MaxHeight="144" MaxWidth="240"
-        MinHeight="144" MinWidth="240"
-        SaveWindowPosition="True" ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" StateChanged="MetroWindow_StateChanged" Icon="pack://siteoforigin:,,,/GDUTDrCom.ico">
+        Height="144" Width="280"
+        MaxHeight="144" MaxWidth="280"
+        MinHeight="144" MinWidth="280"
+        SaveWindowPosition="True"
+        ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" StateChanged="MetroWindow_StateChanged" Icon="pack://siteoforigin:,,,/GDUTDrCom.ico" Closing="MetroWindow_Closing" Loaded="MetroWindow_Loaded">
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
             <TextBlock><Hyperlink NavigateUri="https://github.com/mchome" RequestNavigate="About" Foreground="White">About</Hyperlink></TextBlock>
@@ -19,11 +21,11 @@
     </controls:MetroWindow.RightWindowCommands>
     <Grid>
         <Label x:Name="lab_usr" Content="账号" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tb_usr" HorizontalAlignment="Left" Height="23" Margin="53,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="171"/>
+        <TextBox x:Name="tb_usr" HorizontalAlignment="Left" Height="23" Margin="53,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="211"/>
         <Label x:Name="lab_pw" Content="密码" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
-        <PasswordBox x:Name="tb_pw" HorizontalAlignment="Left" Height="23" Margin="53,42,0,0" VerticalAlignment="Top" Width="171"/>
-        <Button x:Name="btn_login" Content="登陆" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="75" Click="btn_login_Click"/>
-        <Button x:Name="btn_logout" Content="注销" HorizontalAlignment="Left" Margin="149,72,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="btn_logout_Click"/>
+        <PasswordBox x:Name="tb_pw" HorizontalAlignment="Left" Height="23" Margin="53,42,0,0" VerticalAlignment="Top" Width="211"/>
+        <Button x:Name="btn_login" Content="登陆" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" Width="110" Click="btn_login_Click"/>
+        <Button x:Name="btn_logout" Content="注销" HorizontalAlignment="Left" Margin="154,73,0,0" VerticalAlignment="Top" Width="110" IsEnabled="False" Click="btn_logout_Click"/>
 
     </Grid>
 </controls:MetroWindow>
