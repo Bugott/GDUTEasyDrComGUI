@@ -24,7 +24,7 @@
         <TextBox x:Name="tb_usr" HorizontalAlignment="Left" Height="23" Margin="53,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="211"/>
         <Label x:Name="lab_pw" Content="密码" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
         <PasswordBox x:Name="tb_pw" HorizontalAlignment="Left" Height="23" Margin="53,42,0,0" VerticalAlignment="Top" Width="211"/>
-        <Button x:Name="btn_login" Content="登陆" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" Width="110" Click="btn_login_Click"/>
+        <Button x:Name="btn_login" Content="登陆" HorizontalAlignment="Left" Margin="10,73,0,0" VerticalAlignment="Top" Width="110" Click="btn_login_Click" IsDefault="True"/>
         <Button x:Name="btn_logout" Content="注销" HorizontalAlignment="Left" Margin="154,73,0,0" VerticalAlignment="Top" Width="110" IsEnabled="False" Click="btn_logout_Click"/>
 
     </Grid>

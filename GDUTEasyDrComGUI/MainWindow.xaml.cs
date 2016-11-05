@@ -32,7 +32,7 @@ namespace GDUTEasyDrComGUI
         private void MinimizeSettings()
         {
             AddTrayIcon();
-            string tips = rasHandle == null ? "登陆程序在托盘" : $"成功登陆!(IP{ipaddr.IPAddress})";
+            string tips = info.rasHandle == null ? "登陆程序在托盘" : $"成功登陆!(IP{info.ipaddr.IPAddress})";
             trayIcon.ShowBalloonTip(3000, "", tips, ToolTipIcon.Info);
             ShowInTaskbar = false;
         }
@@ -94,7 +94,14 @@ namespace GDUTEasyDrComGUI
 
         private void MetroWindow_Closing(object sender, CancelEventArgs e)
         {
-            btn_logout_Click(btn_logout, new RoutedEventArgs());
+            if (info.Connected)
+            {
+                if (System.Windows.MessageBox.Show("直接退出将自动注销，是否继续退出?", "退出", MessageBoxButton.YesNo)
+                  == MessageBoxResult.Yes)
+                    btn_logout_Click(btn_logout, new RoutedEventArgs());
+                else
+                    e.Cancel = true;
+            }
         }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)

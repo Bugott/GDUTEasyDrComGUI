@@ -10,12 +10,17 @@ namespace GDUTEasyDrComGUI
 {
     public partial class MainWindow
     {
-        private RasHandle rasHandle;
-        private RasIPInfo ipaddr;
-        private Process proc;
+        private struct ConnectInfo
+        {
+            public bool Connected;
+            public RasHandle rasHandle;
+            public RasIPInfo ipaddr;
+            public Process proc;
+        }
+        private ConnectInfo info = new ConnectInfo();
         private Encoding defEncoding = Encoding.GetEncoding(1252); // ANSI
 
-        public void CreateConnect(string ConnectName)
+        private void CreateConnect(string ConnectName)
         {
             RasDialer dialer = new RasDialer();
             RasPhoneBook book = new RasPhoneBook();
@@ -54,18 +59,18 @@ namespace GDUTEasyDrComGUI
                 dialer.PhoneBookPath = RasPhoneBook.GetPhoneBookPath(RasPhoneBookType.User);
                 dialer.Credentials = new System.Net.NetworkCredential(username, password);
                 dialer.Timeout = 500;
-                rasHandle = dialer.Dial();
-                while (rasHandle.IsInvalid)
+                info.rasHandle = dialer.Dial();
+                while (info.rasHandle.IsInvalid)
                 {
                     Logger.Log("拨号失败");
                     throw new Exception("拨号失败");
                 }
-                if (!rasHandle.IsInvalid)
+                if (!info.rasHandle.IsInvalid)
                 {
                     Logger.Log("拨号成功");
                     RasConnection conn = null;
                     foreach (var con in RasConnection.GetActiveConnections())
-                        if (con.Handle == rasHandle)
+                        if (con.Handle == info.rasHandle)
                         {
                             conn = con;
                             break;
@@ -74,10 +79,12 @@ namespace GDUTEasyDrComGUI
                     {
                         throw new Exception("Unable to get active connection by handle");
                     }
-                    ipaddr = (RasIPInfo)conn.GetProjectionInfo(RasProjectionType.IP);
-                    Logger.Log("获得IP： " + ipaddr.IPAddress.ToString());
+                    info.ipaddr = (RasIPInfo)conn.GetProjectionInfo(RasProjectionType.IP);
+                    Logger.Log("获得IP： " + info.ipaddr.IPAddress.ToString());
                     btn_login.IsEnabled = false;
                     btn_logout.IsEnabled = true;
+
+                    info.Connected = true;
 
                     //SendHeartBeat
                     CreateChildProcess();
@@ -95,16 +102,16 @@ namespace GDUTEasyDrComGUI
         {
             try
             {
-                if (proc != null && !proc.HasExited)
-                    proc.Kill();
+                if (info.Connected && !info.proc.HasExited)
+                    info.proc.Kill();
                 foreach (var con in RasConnection.GetActiveConnections())
-                    if (con.Handle == rasHandle)
+                    if (con.Handle == info.rasHandle)
                         con.HangUp();
                 Thread.Sleep(1000);
                 Logger.Log("已注销");
                 btn_login.IsEnabled = true;
                 btn_logout.IsEnabled = false;
-                rasHandle = null;
+                info.Connected = false;
             }
             catch (Exception ex)
             {
@@ -114,19 +121,19 @@ namespace GDUTEasyDrComGUI
 
         private void CreateChildProcess()
         {
-            proc = new Process();
-            proc.StartInfo.FileName = "gdut-drcom.exe";
-            proc.StartInfo.Arguments = "";
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.RedirectStandardError = true;
-            proc.StartInfo.RedirectStandardInput = true;
-            proc.StartInfo.RedirectStandardOutput = true;
-            proc.StartInfo.CreateNoWindow = true;
-            proc.EnableRaisingEvents = true;
+            info.proc = new Process();
+            info.proc.StartInfo.FileName = "gdut-drcom.exe";
+            info.proc.StartInfo.Arguments = "";
+            info.proc.StartInfo.UseShellExecute = false;
+            info.proc.StartInfo.RedirectStandardError = true;
+            info.proc.StartInfo.RedirectStandardInput = true;
+            info.proc.StartInfo.RedirectStandardOutput = true;
+            info.proc.StartInfo.CreateNoWindow = true;
+            info.proc.EnableRaisingEvents = true;
             //proc.Exited += (s, e) => Close();
-            proc.Start();
-            Read(proc.StandardOutput);
-            Read(proc.StandardError);
+            info.proc.Start();
+            Read(info.proc.StandardOutput);
+            Read(info.proc.StandardError);
         }
 
         private async void Read(StreamReader sr)
