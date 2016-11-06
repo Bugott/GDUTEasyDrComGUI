@@ -18,7 +18,7 @@ namespace GDUTEasyDrComGUI
         public MainWindow()
         {
             InitializeComponent();
-            CreateConnect("PPPoEDialer");
+            CreateConnect();
         }
 
         private void MetroWindow_StateChanged(object sender, EventArgs e)
@@ -32,7 +32,7 @@ namespace GDUTEasyDrComGUI
         private void MinimizeSettings()
         {
             AddTrayIcon();
-            string tips = info.rasHandle == null ? "登陆程序在托盘" : $"成功登陆!(IP{info.ipaddr.IPAddress})";
+            string tips = info.rasHandle == null ? "登陆程序在托盘" : $"成功登陆!(IP: {info.ipaddr.IPAddress})";
             trayIcon.ShowBalloonTip(3000, "", tips, ToolTipIcon.Info);
             ShowInTaskbar = false;
         }
@@ -81,15 +81,22 @@ namespace GDUTEasyDrComGUI
                 "About");
         }
 
+        private void btn_login_Click(object sender, RoutedEventArgs e)
+        {
+            if (Login(tb_usr.Text, tb_pw.Password))
+            {
+                WindowState = System.Windows.WindowState.Minimized;
+                btn_login.IsEnabled = false;
+                btn_logout.IsEnabled = true;
+                RememberConfig.SaveConfig(tb_usr.Text, tb_pw.Password);
+            }
+        }
+
         private void btn_logout_Click(object sender, RoutedEventArgs e)
         {
             Logout();
-        }
-
-        private void btn_login_Click(object sender, RoutedEventArgs e)
-        {
-            Login();
-            RememberConfig.SaveConfig(tb_usr.Text, tb_pw.Password);
+            btn_login.IsEnabled = true;
+            btn_logout.IsEnabled = false;
         }
 
         private void MetroWindow_Closing(object sender, CancelEventArgs e)

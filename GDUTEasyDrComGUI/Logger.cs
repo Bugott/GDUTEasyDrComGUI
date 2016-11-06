@@ -7,9 +7,9 @@ namespace GDUTEasyDrComGUI
     {
         public static void Log(string log)
         {
-            using (StreamWriter sw = new StreamWriter("log.txt"))
+            using (StreamWriter sw = new StreamWriter("log.txt", true))
             {
-                sw.WriteLine(DateTime.Now.ToLongTimeString() + " : " + log);
+                sw.WriteLine(DateTime.Now.ToLongTimeString() + " :" + Environment.NewLine + log);
             }
         }
     }

@@ -3,8 +3,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
-using System.Threading;
 
 namespace GDUTEasyDrComGUI
 {
@@ -18,108 +18,109 @@ namespace GDUTEasyDrComGUI
             public Process proc;
         }
         private ConnectInfo info = new ConnectInfo();
+
+        private RasDialer dialer = new RasDialer();
+        private readonly string ConnectionName = "GDUT PPPoE Dialer";
         private Encoding defEncoding = Encoding.GetEncoding(1252); // ANSI
 
-        private void CreateConnect(string ConnectName)
+        private void CreateConnect()
         {
-            RasDialer dialer = new RasDialer();
             RasPhoneBook book = new RasPhoneBook();
             try
             {
                 book.Open(RasPhoneBook.GetPhoneBookPath(RasPhoneBookType.User));
-                if (book.Entries.Contains(ConnectName))
+                if (book.Entries.Contains(ConnectionName))
                 {
-                    book.Entries[ConnectName].PhoneNumber = " ";
-                    book.Entries[ConnectName].Update();
+                    book.Entries[ConnectionName].PhoneNumber = " ";
+                    book.Entries[ConnectionName].Update();
                 }
                 else
                 {
-                    RasDevice device = RasDevice.GetDevices().Where(o => o.DeviceType == RasDeviceType.PPPoE).First();
-                    RasEntry entry = RasEntry.CreateBroadbandEntry(ConnectName, device);
+                    RasDevice device = RasDevice.GetDevices().
+                        Where(o => o.DeviceType == RasDeviceType.PPPoE).First();
+                    RasEntry entry = RasEntry.CreateBroadbandEntry(ConnectionName, device);
                     entry.PhoneNumber = " ";
                     book.Entries.Add(entry);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //lb_status.Content = "创建PPPoE连接失败";
+                Logger.Log($"创建PPPoE连接失败({ex.Message})");
             }
         }
 
-        private void Login()
+        private bool Login(string username, string password)
         {
             try
             {
-                string username = "\r\n" + tb_usr.Text;
-                string password = tb_pw.Password.ToString();
-                RasDialer dialer = new RasDialer();
-                dialer.EntryName = "PPPoEDialer";
+                // Fuck it!
+                username = "\r\n" + username;
+
+                dialer.EntryName = ConnectionName;
                 dialer.PhoneNumber = " ";
                 dialer.AllowUseStoredCredentials = true;
                 dialer.PhoneBookPath = RasPhoneBook.GetPhoneBookPath(RasPhoneBookType.User);
-                dialer.Credentials = new System.Net.NetworkCredential(username, password);
-                dialer.Timeout = 500;
+                dialer.Credentials = new NetworkCredential(username, password);
+                dialer.Timeout = 1000;
+                dialer.StateChanged += Dialer_StateChanged;
+                dialer.Error += Dialer_Error;
                 info.rasHandle = dialer.Dial();
-                while (info.rasHandle.IsInvalid)
-                {
-                    Logger.Log("拨号失败");
+                if (info.rasHandle.IsInvalid)
                     throw new Exception("拨号失败");
-                }
-                if (!info.rasHandle.IsInvalid)
+                else
                 {
                     Logger.Log("拨号成功");
-                    RasConnection conn = null;
-                    foreach (var con in RasConnection.GetActiveConnections())
-                        if (con.Handle == info.rasHandle)
-                        {
-                            conn = con;
-                            break;
-                        }
+                    RasConnection conn = RasConnection.GetActiveConnections().
+                        Where(o => o.Handle == info.rasHandle).First();
                     if (conn == null)
-                    {
                         throw new Exception("Unable to get active connection by handle");
-                    }
                     info.ipaddr = (RasIPInfo)conn.GetProjectionInfo(RasProjectionType.IP);
                     Logger.Log("获得IP： " + info.ipaddr.IPAddress.ToString());
-                    btn_login.IsEnabled = false;
-                    btn_logout.IsEnabled = true;
 
                     info.Connected = true;
-
-                    //SendHeartBeat
-                    CreateChildProcess();
-
-                    WindowState = System.Windows.WindowState.Minimized;
+                    
+                    StartHeartBeat();
                 }
+                return true;
             }
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show(ex.Message, "拨号异常");
+                return false;
             }
+        }
+
+        private void Dialer_Error(object sender, ErrorEventArgs e)
+        {
+            Logger.Log(e.GetException().Message);
+        }
+
+        private void Dialer_StateChanged(object sender, StateChangedEventArgs e)
+        {
+            Logger.Log(e.State.ToString());
         }
 
         private void Logout()
         {
+            if (!info.Connected)
+                return;
             try
             {
-                if (info.Connected && !info.proc.HasExited)
-                    info.proc.Kill();
-                foreach (var con in RasConnection.GetActiveConnections())
-                    if (con.Handle == info.rasHandle)
-                        con.HangUp();
-                Thread.Sleep(1000);
+                RasConnection.GetActiveConnections().
+                    Where(o => o.Handle == info.rasHandle).First()?.HangUp();
                 Logger.Log("已注销");
-                btn_login.IsEnabled = true;
-                btn_logout.IsEnabled = false;
                 info.Connected = false;
+                if (!info.proc.HasExited)
+                    info.proc.Kill();
             }
             catch (Exception ex)
             {
+                Logger.Log($"注销异常({ex.Message})");
                 System.Windows.MessageBox.Show(ex.Message, "注销异常");
             }
         }
 
-        private void CreateChildProcess()
+        private void StartHeartBeat()
         {
             info.proc = new Process();
             info.proc.StartInfo.FileName = "gdut-drcom.exe";
@@ -130,9 +131,9 @@ namespace GDUTEasyDrComGUI
             info.proc.StartInfo.RedirectStandardOutput = true;
             info.proc.StartInfo.CreateNoWindow = true;
             info.proc.EnableRaisingEvents = true;
-            //proc.Exited += (s, e) => Close();
+            info.proc.Exited += HeartBeat_Exited;
             info.proc.Start();
-            Read(info.proc.StandardOutput);
+            //Read(info.proc.StandardOutput);
             Read(info.proc.StandardError);
         }
 
@@ -146,7 +147,19 @@ namespace GDUTEasyDrComGUI
                 byte[] abytes = defEncoding.GetBytes(buff, 0, size);
                 Logger.Log(defEncoding.GetString(abytes));
             } while (size > 0);
-            Logger.Log("Exited");
+            Logger.Log("Heart Beat process reading error thread exited");
+        }
+
+        private void HeartBeat_Exited(object sender, EventArgs e)
+        {
+            if (info.Connected)
+            {
+                Logout();
+                btn_login.Dispatcher.Invoke(() => btn_login.IsEnabled = true);
+                btn_logout.Dispatcher.Invoke(() => btn_logout.IsEnabled = false);
+                Logger.Log($"心跳包进程异常结束");
+                System.Windows.MessageBox.Show("心跳包进程异常结束", "错误");
+            }
         }
     }
 }

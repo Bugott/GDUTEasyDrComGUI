@@ -6,7 +6,7 @@ namespace GDUTEasyDrComGUI
     {
         private static string fileName = "gdutDrComUserDat.dat";
 
-        private static bool HasConfig()
+        public static bool HasConfig()
         {
             return File.Exists(fileName);
         }
