@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Windows;
 
 namespace GDUTEasyDrComGUI
 {
@@ -76,16 +77,17 @@ namespace GDUTEasyDrComGUI
                         throw new Exception("Unable to get active connection by handle");
                     info.ipaddr = (RasIPInfo)conn.GetProjectionInfo(RasProjectionType.IP);
                     Logger.Log("获得IP： " + info.ipaddr.IPAddress.ToString());
-
-                    info.Connected = true;
                     
                     StartHeartBeat();
+
+                    info.Connected = true;
                 }
                 return true;
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.Message, "拨号异常");
+                Logger.Log($"拨号异常({ex.Message})");
+                MessageBox.Show(ex.Message, "拨号异常");
                 return false;
             }
         }
@@ -106,8 +108,10 @@ namespace GDUTEasyDrComGUI
                 return;
             try
             {
-                RasConnection.GetActiveConnections().
-                    Where(o => o.Handle == info.rasHandle).First()?.HangUp();
+                var x = RasConnection.GetActiveConnections().
+                    Where(o => o.Handle == info.rasHandle);
+                if (x.Count() > 0)
+                    x.First()?.HangUp();
                 Logger.Log("已注销");
                 info.Connected = false;
                 if (!info.proc.HasExited)
@@ -116,7 +120,7 @@ namespace GDUTEasyDrComGUI
             catch (Exception ex)
             {
                 Logger.Log($"注销异常({ex.Message})");
-                System.Windows.MessageBox.Show(ex.Message, "注销异常");
+                MessageBox.Show(ex.Message, "注销异常");
             }
         }
 
@@ -128,7 +132,7 @@ namespace GDUTEasyDrComGUI
             info.proc.StartInfo.UseShellExecute = false;
             info.proc.StartInfo.RedirectStandardError = true;
             info.proc.StartInfo.RedirectStandardInput = true;
-            info.proc.StartInfo.RedirectStandardOutput = true;
+            //info.proc.StartInfo.RedirectStandardOutput = true;
             info.proc.StartInfo.CreateNoWindow = true;
             info.proc.EnableRaisingEvents = true;
             info.proc.Exited += HeartBeat_Exited;
@@ -158,7 +162,7 @@ namespace GDUTEasyDrComGUI
                 btn_login.Dispatcher.Invoke(() => btn_login.IsEnabled = true);
                 btn_logout.Dispatcher.Invoke(() => btn_logout.IsEnabled = false);
                 Logger.Log($"心跳包进程异常结束");
-                System.Windows.MessageBox.Show("心跳包进程异常结束", "错误");
+                MessageBox.Show("心跳包进程异常结束", "错误");
             }
         }
     }

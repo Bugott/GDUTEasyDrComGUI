@@ -13,7 +13,10 @@
         MaxHeight="144" MaxWidth="280"
         MinHeight="144" MinWidth="280"
         SaveWindowPosition="True"
-        ResizeMode="CanMinimize" SizeToContent="WidthAndHeight" StateChanged="MetroWindow_StateChanged" Icon="pack://siteoforigin:,,,/GDUTDrCom.ico" Closing="MetroWindow_Closing" Loaded="MetroWindow_Loaded">
+        ResizeMode="CanMinimize"
+        SizeToContent="WidthAndHeight"
+        StateChanged="MetroWindow_StateChanged"
+        Closing="MetroWindow_Closing" Loaded="MetroWindow_Loaded">
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
             <TextBlock><Hyperlink NavigateUri="https://github.com/mchome" RequestNavigate="About" Foreground="White">About</Hyperlink></TextBlock>

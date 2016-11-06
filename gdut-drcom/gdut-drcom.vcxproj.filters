@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\crypt">
+      <UniqueIdentifier>{d3f3d724-83c6-48ab-810b-11cba72962db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\crypt">
+      <UniqueIdentifier>{5e7ae2e8-f51f-4406-ba4a-a1dee0e7ccdd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="auth.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="config.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gdut-drcom.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="crypt\md4.c">
+      <Filter>Source Files\crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="crypt\md5.c">
+      <Filter>Source Files\crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="crypt\sha1.c">
+      <Filter>Source Files\crypt</Filter>
+    </ClCompile>
+    <ClCompile Include="unistd.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="getopt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="auth.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="crypt\md4.h">
+      <Filter>Header Files\crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="crypt\md5.h">
+      <Filter>Header Files\crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="crypt\sha1.h">
+      <Filter>Header Files\crypt</Filter>
+    </ClInclude>
+    <ClInclude Include="getopt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="authCfg.txt" />
+  </ItemGroup>
+</Project>

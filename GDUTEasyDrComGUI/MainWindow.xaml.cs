@@ -18,6 +18,7 @@ namespace GDUTEasyDrComGUI
         public MainWindow()
         {
             InitializeComponent();
+            Icon = Properties.Resources.GDUTDrComIcon.ToImageSource();
             CreateConnect();
         }
 
@@ -52,7 +53,7 @@ namespace GDUTEasyDrComGUI
             }
             trayIcon = new NotifyIcon
             {
-                Icon = new System.Drawing.Icon("GDUTDrCom.ico"),
+                Icon = Properties.Resources.GDUTDrComIcon,
                 Text = Title
             };
             trayIcon.DoubleClick += (s, e) => MaximizeSetting();
