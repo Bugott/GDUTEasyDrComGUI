@@ -127,7 +127,7 @@ namespace GDUTEasyDrComGUI
         private void StartHeartBeat()
         {
             info.proc = new Process();
-            info.proc.StartInfo.FileName = "gdut-drcom.exe";
+            info.proc.StartInfo.FileName = @".\heartbeat\gdut-drcom.exe";
             info.proc.StartInfo.Arguments = "";
             info.proc.StartInfo.UseShellExecute = false;
             info.proc.StartInfo.RedirectStandardError = true;

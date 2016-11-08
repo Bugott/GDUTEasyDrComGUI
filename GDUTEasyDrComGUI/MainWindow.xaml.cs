@@ -78,7 +78,7 @@ namespace GDUTEasyDrComGUI
                 "\thttps://github.com/lyhyl/GDUTEasyDrComGUI\n" +
                 "Ref:\n" +
                 "\thttps://github.com/mchome/PPPoE-Dialer\n" +
-                "\thttps://github.com/chenhaowen01/gdut-drcom",
+                "\thttps://github.com/drcoms/drcom-generic",
                 "About");
         }
 
