@@ -10,7 +10,7 @@ import hashlib
  
 # CONFIG
 server = '10.0.3.6'
-pppoe_flag = '\x2b'
+pppoe_flag = '\x6b'
 keep_alive2_flag = '\xdc'
 # CONFIG_END
  
@@ -329,8 +329,8 @@ def main():
     s = Socket(server)
     while True:
         pppoe = PPPOEHeartbeat(1)
- #       pppoe.send(s)
-        keep_alive2(s, pppoe)
+        pppoe.send(s)
+        #keep_alive2(s, pppoe)
  
 if __name__ == '__main__':
     main()

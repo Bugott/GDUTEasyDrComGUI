@@ -7,7 +7,7 @@
     <ProjectGuid>{DBC3B855-1AB8-423E-97D1-EB30FD3F1AC7}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>_1107Core</RootNamespace>
+    <RootNamespace>Core</RootNamespace>
     <AssemblyName>1107Core</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -51,7 +51,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Nor.txt" />
+    <Content Include="Nor.py" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

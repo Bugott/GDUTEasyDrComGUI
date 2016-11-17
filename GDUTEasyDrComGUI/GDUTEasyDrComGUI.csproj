@@ -101,8 +101,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Heartbeat.cs" />
     <Compile Include="IconUtilities.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="MD4.cs" />
     <Compile Include="RememberConfig.cs" />
     <Compile Include="Win32Native.cs" />
     <Page Include="MainWindow.xaml">
